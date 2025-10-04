@@ -1,0 +1,911 @@
+/* File: css/styles.css
+   Purpose: All styling for "For You" website (video background, hero, modal, controls, particles)
+   Notes:
+   - Uses CSS variables for easy theming.
+   - Respect user's "prefers-reduced-motion".
+   - Well-commented for future edits.
+*/
+
+/* =========================
+   Theme variables (tweak to change mood)
+   ========================= */
+:root{
+  --bg-overlay: rgba(8,10,13,0.45);     /* dark overlay over video */
+  --glass: rgba(255,255,255,0.06);      /* frosted glass for panels */
+  --glass-strong: rgba(255,255,255,0.10);
+  --accent: #ff6b9a;                    /* warm pink accent */
+  --accent-2: #ffd166;                  /* soft gold */
+  --muted: rgba(255,255,255,0.85);
+  --muted-2: rgba(255,255,255,0.65);
+  --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  --radius: 14px;
+  --max-width: 1100px;
+  --container-padding: 20px;
+  --glass-border: rgba(255,255,255,0.06);
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --backdrop-blur: 8px;
+  --text-glow: 0 2px 10px rgba(255,107,154,0.12);
+}
+
+/* =========================
+   Reset & base
+   ========================= */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg,#06060a 0%, #0b0f14 100%);
+  color: white;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height: 1.35;
+}
+
+/* Container helper */
+.container{
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  width: 100%;
+  z-index: 50;
+}
+
+/* Utility: visually-hidden for accessibility */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* =========================
+   Background video & overlay
+   ========================= */
+.video-bg{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none; /* don't capture clicks */
+  overflow: hidden;
+}
+
+/* Make sure the video covers the screen */
+.bg-video{
+  position: absolute;
+  top: 50%; left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto; height: auto;
+  transform: translate(-50%,-50%);
+  object-fit: cover;
+  filter: saturate(1.04) contrast(1.02) brightness(0.9);
+  will-change: transform;
+}
+
+/* Overlay to help readability */
+.video-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6,8,12,0.28), rgba(0,0,0,0.6));
+  mix-blend-mode: multiply;
+}
+
+/* =========================
+   Particles canvas - sits above video, below content
+   ========================= */
+.particles-canvas{
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none; /* allow clicks through */
+}
+
+/* =========================
+   Header (controls)
+   ========================= */
+.site-header{
+  position: fixed;
+  z-index: 6;
+  top: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* container none, inner allow */
+}
+
+.header-inner{
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  align-self: start;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 999px;
+  backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+}
+
+/* Brand */
+.site-header{
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  z-index: 9999;
+}
+
+/* Controls */
+.controls{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Button base */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--muted);
+  transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s;
+  user-select: none;
+  font-size: 0.95rem;
+}
+
+/* Make header buttons subtle */
+.control-btn{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 8px 10px;
+}
+
+/* Primary & ghost styles for CTAs in hero */
+.primary-btn{
+  background: linear-gradient(90deg, var(--accent), #ff5b87);
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  box-shadow: 0 6px 20px rgba(255,107,154,0.14);
+  border-radius: 999px;
+}
+
+.ghost-btn{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+/* Button interactions */
+.btn:active { transform: translateY(1px) scale(.997); }
+.btn:focus { outline: none; box-shadow: 0 0 0 4px rgba(255,107,154,0.10); }
+
+/* =========================
+   Hero layout
+   ========================= */
+.hero{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  z-index: 4;
+  position: relative;
+  padding-top: 90px; /* leave room for header */
+  padding-bottom: 60px;
+}
+
+/* Inner hero split */
+.hero-inner{
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Left avatar column */
+.hero-left{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Avatar */
+.avatar{
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6), 0 2px 8px rgba(0,0,0,0.25);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  transition: transform .35s cubic-bezier(.2,.9,.3,1);
+}
+
+/* subtle lift effect on hover */
+.avatar:hover { transform: translateY(-6px) scale(1.02); }
+
+/* subtitle */
+.subtle{
+  color: var(--muted-2);
+  font-size: 0.95rem;
+  max-width: 220px;
+}
+
+/* Right content */
+.hero-right{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+}
+
+/* Headline styling */
+.headline{
+  margin: 0 0 8px 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 2.6rem;
+  letter-spacing: -0.01em;
+  color: white;
+  text-shadow: var(--text-glow);
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+/* small word style in headline */
+.headline .small{
+  font-size: 0.95rem;
+  color: var(--muted-2);
+  font-weight: 500;
+}
+
+/* name highlight */
+.her-name{
+  color: var(--accent);
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 4px 18px rgba(255,107,154,0.08);
+}
+
+/* Typed lines area */
+.typed-lines{
+  margin-top: 8px;
+  margin-bottom: 14px;
+  font-size: 1.15rem;
+  color: var(--muted);
+  min-height: 1.8em; /* prevent layout jump while typing */
+  display: block;
+}
+
+/* CTA row */
+.cta-row{
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  align-items: center;
+}
+
+/* hint */
+.hint{
+  margin-top: 10px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+}
+
+/* =========================
+   Poem modal
+   ========================= */
+/* =========================
+   Poem modal unified styling
+   ========================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 9999; /* above everything */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.25s ease;
+}
+
+.modal.open {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.modal-content {
+  width: min(720px, 90%);
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 22px;
+  padding: 2.5rem 3rem;
+  position: relative;
+  background: linear-gradient(135deg, #ff9a9e, #ffbc9a, #ff7e5f, #ff6b81, #ff9a9e);
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  transform: translateY(20px);
+  animation: fadeInUp 1.2s ease forwards, gradientMove 8s ease infinite;
+  font-family: 'Dancing Script', cursive; /* cursive font */
+  font-size: 1.25rem;
+  line-height: 2;
+  color: black; /* text color */
+}
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* =========================
+   Poem text
+   ========================= */
+.poem-body p {
+  margin: 0 0 1.5rem 0;
+  text-align: justify;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.25rem;
+  line-height: 2;
+  color: black; /* unified text color */
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional subtle animated overlay behind text (same color) */
+.poem-body p::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 12px;
+  background: inherit; /* same gradient as modal */
+  opacity: 0.25;
+}
+
+/* =========================
+   Animations
+   ========================= */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff9a9e, #ffbc9a, #ff7e5f);
+  border-radius: 10px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff7e5f, #ffbc9a, #ff9a9e);
+}
+
+
+
+/* =========================
+   Footer
+   ========================= */
+.site-footer{
+  position: relative;
+  z-index: 4;
+  margin-top: 40px;
+  padding: 24px 0 48px 0;
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+}
+
+/* =========================
+   Small animations & micro-interactions
+   ========================= */
+/* gentle pulse for primary CTA on idle */
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 6px 20px rgba(255,107,154,0.14); }
+  50% { transform: scale(1.02); box-shadow: 0 12px 36px rgba(255,107,154,0.18); }
+  100% { transform: scale(1); box-shadow: 0 6px 20px rgba(255,107,154,0.14); }
+}
+
+/* apply subtle pulse */
+.primary-btn {
+  animation: pulse 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* hearts or particles "pop" helper (applied by JS on click) */
+.pop {
+  animation: pop .55s cubic-bezier(.2,.9,.3,1) forwards;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6) translateY(0); opacity: 0; }
+  40% { transform: scale(1.12) translateY(-6px); opacity: 1; }
+  100% { transform: scale(1) translateY(-12px); opacity: 0; }
+}
+
+/* Typed cursor */
+.typed-lines::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  background: var(--muted);
+  margin-left: 8px;
+  vertical-align: -0.15em;
+  animation: blink 1s steps(2, start) infinite;
+  border-radius: 1px;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* =========================
+   Responsive behavior
+   ========================= */
+@media (max-width: 900px){
+  .hero-inner{
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .avatar{ width: 160px; height: 160px; }
+  .headline{ font-size: 1.9rem; }
+  .hero-right{ padding: 18px; }
+  .site-header{ top: 12px; }
+  .header-inner{ padding: 8px; }
+}
+
+/* small screens */
+@media (max-width: 520px){
+  .avatar{ width: 140px; height: 140px; border-radius: 12px; }
+  .headline{ font-size: 1.6rem; }
+  .typed-lines{ font-size: 1rem; }
+  .primary-btn{ padding: 10px 14px; font-size: 0.95rem; }
+}
+
+/* =========================
+   Accessibility respects prefers-reduced-motion
+   ========================= */
+@media (prefers-reduced-motion: reduce){
+  * { animation: none !important; transition: none !important; }
+  .typed-lines::after { display: none; }
+  .primary-btn { animation: none; }
+}
+
+/* =========================
+   Small printable fallback so the layout isn't broken without video
+   ========================= */
+@media (print){
+  .video-bg, .particles-canvas { display: none; }
+  .site-header, .site-footer { display: none; }
+  .hero-right, .hero-left { box-shadow: none; background: none; border: none; }
+}
+
+/* Optional: tiny pop effect when samosa button clicked */
+@keyframes samosa-pop {
+  0% { transform: scale(0.5) rotate(0deg); opacity: 0; }
+  40% { transform: scale(1.2) rotate(20deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 0; }
+}
+
+/* We won’t directly use it in JS since we draw on canvas, but good if needed later */
+
+/* =========================
+   Hero left image & text
+   ========================= */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; /* spacing between image and text */
+  text-align: center;
+}
+
+.hero-image {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6), 0 2px 8px rgba(0,0,0,0.25);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  transition: transform .35s cubic-bezier(.2,.9,.3,1);
+}
+
+/* subtle lift effect on hover */
+.hero-image:hover { transform: translateY(-4px) scale(1.02); }
+
+.hero-text {
+  font-size: 0.95rem;
+  color: var(--muted-2);
+  max-width: 220px;
+}
+
+.brand a {
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1rem; /* slightly smaller for longer text */
+  letter-spacing: 0.02em;
+  text-align: center;
+  display: block;
+  max-width: 250px; /* prevents overflow */
+}
+
+.favorite-songs {
+  position: relative;
+  z-index: 10;  /* ensures it sits above video & particles */
+  padding: 60px 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+
+.favorite-songs .section-title {
+  font-size: 2em;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.song-card {
+  background: rgba(0, 0, 0, 0.7); /* slightly darker to be always visible */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  width: 100%;
+  max-width: 350px;
+  opacity: 1; /* ensure it's visible by default */
+  position: relative;
+  z-index: 11;
+}
+
+
+.song-card:hover {
+  transform: translateY(-5px);
+}
+
+.song-card iframe {
+  display: block;
+  border: none;
+  width: 100%;
+  height: 200px;
+}
+
+.song-name {
+  padding: 10px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+  background: rgba(0,0,0,0.3);
+}
+
+.carousel-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.carousel-heading h2 {
+  font-family: 'Georgia', serif; /* elegant serif font */
+  font-size: 3rem; /* big and bold */
+  color: #fff; /* can change depending on background */
+  letter-spacing: 2px; /* slight spacing */
+  text-transform: uppercase; /* optional */
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.carousel-heading h2::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 50%;
+  margin: 10px auto 0;
+  background: #fff; /* underline color */
+  border-radius: 2px;
+}
+
+
+.photo-carousel {
+  width: 100%;
+  overflow: hidden;
+  margin: 50px 0;
+}
+
+.carousel {
+  display: flex;
+  gap: 0; /* tightly packed */
+  overflow-x: auto;
+  scroll-behavior: auto; /* auto because we're controlling scroll via JS */
+  padding: 0 0;
+  cursor: grab;
+}
+
+.carousel.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+}
+
+.carousel-item img {
+  width: 250px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+/* Zoom popup */
+#zoom-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 90;
+}
+
+#zoom-popup img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+
+.favorite-songs {
+  padding: 60px 20px;
+  color: #fff;
+}
+
+.favorite-songs .section-title {
+  font-family: 'Georgia', serif; /* same elegant font as Stories heading */
+  font-size: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4); /* gradient text */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 40px;
+  display: inline-block;
+  position: relative;
+}
+
+.favorite-songs .section-title::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 50%;
+  margin: 10px auto 0;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.favorite-songs .songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+.favorite-songs .song-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.favorite-songs .song-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+.favorite-songs iframe {
+  width: 100%;
+  max-width: 320px; /* maintain aspect ratio for responsiveness */
+  height: 180px;
+  border-radius: 12px;
+  border: none;
+}
+
+.favorite-songs .song-name {
+  margin-top: 10px;
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  text-align: center;
+  color: #fff;
+}
+
+.aesthetic-line {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6em;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 1px;
+
+  /* Gradient text */
+  background: linear-gradient(90deg, #fceabb, #f8b500, #fceabb);
+  background-size: 200% auto;   /* Make gradient wider so it can move */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Soft shadow */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+
+  /* Smooth fade-in + gradient animation */
+  opacity: 0;
+  animation: fadeIn 2s ease forwards, gradientMove 6s linear infinite;
+
+  display: inline-block; 
+  margin: 0; 
+  padding: 0; 
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ===== Poem Section Styles ===== */
+#poem-section {
+  padding: 80px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+
+#poem-section .poem-heading {
+  font-family: 'Georgia', serif; /* elegant serif font */
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: inline-block;
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+#poem-section .poem-heading::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 50%;
+  margin: 10px auto 0;
+  background: #fff;
+  border-radius: 2px;
+}
+
+#poem-section .poem-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 3rem;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #ff9a9e, #ffbc9a, #ff7e5f, #ff6b81, #ff9a9e);
+  background-size: 400% 400%;
+  animation: poemGradientMove 10s ease infinite;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: black;
+
+  /* Scrollable setup */
+  max-height: 500px; /* Adjust height */
+  overflow-y: auto;
+}
+
+/* Poem text */
+#poem-section .poem-text p {
+  margin: 0 0 1.2rem;
+  text-align: justify;
+}
+
+/* Custom scrollbar */
+#poem-section .poem-container::-webkit-scrollbar {
+  width: 8px;
+}
+#poem-section .poem-container::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+#poem-section .poem-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff7e5f, #ff9a9e);
+  border-radius: 10px;
+}
+#poem-section .poem-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff9a9e, #ff7e5f);
+}
+
+/* Gradient animation */
+@keyframes poemGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

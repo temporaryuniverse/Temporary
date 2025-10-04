@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Basic meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="A small, loving website made just for her — with video background, gentle music, and animations."
+    />
+
+    <!-- Title shown in browser tab -->
+    <title>Bappi</title>
+
+    <!-- Favicon (optional) -->
+    <link rel="icon" href="favicon.ico" />
+
+    <!-- Google Fonts (optional; feel free to swap) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Main stylesheet (we'll create css/styles.css next) -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Helpful meta for social previews (optional) -->
+    <meta property="og:title" content="For You — made with love" />
+    <meta
+      property="og:description"
+      content="A small website made for someone special."
+    />
+    <meta property="og:image" content="images/poster.jpg" />
+
+    <!-- Small inline style to avoid a flash of unstyled content (very small) -->
+    <style>
+      /* Keep the page invisible until CSS loads to avoid layout flicker */
+      html {
+        visibility: visible;
+      }
+      body {
+        opacity: 1;
+      }
+    </style>
+
+    <script src="script.js"></script>
+  </head>
+
+  <body>
+    <!-- =========================
+       FULLSCREEN VIDEO BACKGROUND
+       ========================= -->
+    <div class="video-bg" aria-hidden="true">
+      <!--
+      Background video element:
+      - autoplay muted loop playsinline are used for compatibility on mobile (muted allows autoplay).
+      - Provide fallback poster image or a gradient for browsers that block video.
+      - Put the video file at assets/bg.mp4 — replace with a short, dreamy clip (10-30s).
+    -->
+      <video
+        id="bg-video"
+        class="bg-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="images/poster.png"
+      >
+        <source src="assets/bg.mp4" type="video/mp4" />
+        <!-- Fallback content -->
+        Your browser does not support background video. The site will still
+        work.
+      </video>
+
+      <!-- A subtle overlay so text is readable -->
+      <div class="video-overlay"></div>
+    </div>
+
+    <!-- =========================
+       PARTICLE LAYER (canvas) — hearts/particles drawn by JS
+       This canvas is positioned above the video and below content.
+       ========================= -->
+    <canvas
+      id="particles-canvas"
+      class="particles-canvas"
+      aria-hidden="true"
+    ></canvas>
+
+    <!-- =========================
+       HEADER: small controls (music play/pause, mute, volume)
+       ========================= -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <!-- Left: simple brand -->
+        <div class="brand">
+          <p class="aesthetic-line">
+            &nbsp;&nbsp;&nbsp;&nbsp;रौशनी बन के फ़िज़ाओ में बिखरना होगा.....
+          </p>
+        </div>
+
+        <!-- Right: audio controls -->
+        <div class="controls">
+          <!-- Mute/unmute video (video is muted by default) -->
+          <button
+            id="video-mute-toggle"
+            class="btn control-btn"
+            aria-pressed="true"
+            title="Unmute video"
+          >
+            🔈
+          </button>
+
+          <!-- A simple "open poem" action -->
+          <button id="open-poem" class="btn control-btn">💌 Self-Love</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================
+       MAIN HERO SECTION
+       Centerpiece: avatar, headline, typed lines, CTA buttons
+       ========================= -->
+    <main class="hero" id="hero" role="main">
+      <div class="container hero-inner">
+        <!-- Left column: avatar and small subtitle -->
+        <div class="hero-left">
+          <!-- Her image above text -->
+          <img
+            src="assets/photo3.png"
+            alt="Her photo"
+            class="hero-image"
+            onerror="this.style.display='none'"
+          />
+          <!-- <p class="hero-text">Every little moment reminds me of you.</p> -->
+        </div>
+
+        <!-- Right column: main message -->
+        <div class="hero-right">
+          <h1 class="headline">
+            For<span class="her-name">Wasfi</span>
+            <span class="small"></span>
+          </h1>
+
+          <!-- Typewriter/rotating lines -->
+          <p
+            id="typed-lines"
+            class="typed-lines"
+            aria-live="polite"
+            data-lines='["You light my mornings.","You are my favorite hello.","You are the girl they write poems about.","You are my sunshine on a cloudy day.","You are the best thing that ever happened to me."]'
+          >
+            <!-- JS will insert lines here -->
+          </p>
+
+          <!-- CTAs -->
+          <div class="cta-row">
+            <button id="samosa-btn" class="btn primary-btn">
+              Get Samosa 🥟
+            </button>
+            <a
+              id="download-video"
+              class="btn ghost-btn"
+              href="assets/bg.mp4"
+              download="Bappi.mp4"
+              >Download Video</a
+            >
+          </div>
+
+          <!-- Small hint about interactions -->
+          <p class="hint">
+            Tap on samosa, unmute sound, press self-love, or just scroll down.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <div class="carousel-heading">
+      <h2>Stories Without Words</h2>
+    </div>
+
+    <div class="photo-carousel">
+      <div class="carousel">
+        <div class="carousel-item">
+          <img src="images/1.png" alt="Photo 1" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/2.jpg" alt="Photo 2" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/3.webp" alt="Photo 3" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/4.webp" alt="Photo 4" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/5.jpeg" alt="Photo 5" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/6.heic" alt="Photo 6" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/7.webp" alt="Photo 7" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/8.heic" alt="Photo 8" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/9.webp" alt="Photo 9" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/10.heic" alt="Photo 10" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/11.webp" alt="Photo 11" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/12.heic" alt="Photo 12" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/13.heic" alt="Photo 13" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/14.heic" alt="Photo 14" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/15.webp" alt="Photo 15" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/16.jpeg" alt="Photo 16" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/17.webp" alt="Photo 17" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/18.heic" alt="Photo 18" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/19.heic" alt="Photo 19" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/20.webp" alt="Photo 20" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/21.heic" alt="Photo 21" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/22.webp" alt="Photo 22" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/23.webp" alt="Photo 23" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/24.webp" alt="Photo 24" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/25.heic" alt="Photo 25" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/26.webp" alt="Photo 26" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/27.webp" alt="Photo 27" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/28.heic" alt="Photo 28" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/29.heic" alt="Photo 29" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/30.heic" alt="Photo 30" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/31.webp" alt="Photo 31" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/32.heic" alt="Photo 32" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/33.heic" alt="Photo 33" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/34.heic" alt="Photo 34" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/35.heic" alt="Photo 35" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/36.heic" alt="Photo 36" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/37.heic" alt="Photo 37" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/38.heic" alt="Photo 38" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/39.webp" alt="Photo 39" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/40.heic" alt="Photo 40" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/41.heic" alt="Photo 41" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/42.webp" alt="Photo 42" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/43.heic" alt="Photo 43" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/44.png" alt="Photo 44" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/45.png" alt="Photo 45" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/46.png" alt="Photo 46" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/47.png" alt="Photo 47" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/48.png" alt="Photo 48" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/49.png" alt="Photo 49" />
+        </div>
+        <div class="carousel-item">
+          <img src="images/50.png" alt="Photo 50" />
+        </div>
+      </div>
+    </div>
+    <!-- Zoom Modal -->
+    <div class="zoom-modal" id="zoom-modal">
+      <img src="" alt="Zoomed Image" id="zoomed-img" />
+    </div>
+
+    <!-- =========================
+    WASFI POEM SECTION
+    ========================= -->
+    <!-- ===== Poem Section ===== -->
+    <section id="poem-section">
+      <h2 class="poem-heading">I SEE YOU</h2>
+      <div class="poem-container">
+        <div class="poem-text">
+          <p>
+            In a world where connections blend,<br />
+            A friendship formed, a message sent.<br />
+            Across the digital roads we roam,<br />
+            A bond as genuine as if near in home.<br /><br />
+
+            And then I see you,<br />
+            Not the world’s version of you,<br />
+            Or the version of your closed ones,<br />
+            But the version that only I can see,<br /><br />
+
+            I see how your mind works<br />
+            The way it notices what others miss<br />
+            The tiny hesitations in someone's step<br />
+            The unspoken tension in a room<br />
+            The fleeting sadness someone hides behind a smile<br />
+            The things that are never said<br />
+            This speak volumes to those who read<br /><br />
+
+            I see your strength<br />
+            Life has not been gentle with you<br />
+            The storms you’ve walked through alone<br />
+            You face moments that would shatter anyone else<br />
+            You carry your past, without letting it define you<br />
+            You move forward without needing an applause<br />
+            Still you managed to endure<br />
+            Transforming every wound into cure<br /><br />
+
+            I see your softness too<br />
+            The way you care without expectation,<br />
+            The way you lift others<br />
+            Even when your own world is heavy,<br />
+            The courage it takes to give when giving is a burden.<br /><br />
+
+            I know how complex you are<br />
+            Fierce but gentle,<br />
+            Light but deep,<br />
+            A library of thoughts the world cannot read.<br /><br />
+
+            I see the small things I notice<br />
+            The tilt of your head when listening,<br />
+            The tiny nuances in your speech,<br />
+            The unspoken way your eyes say,<br />
+            The gestures that are invisible to everyone else,<br />
+            But they speak your soul in much more detail.<br /><br />
+
+            I see the nights you fought yourself<br />
+            The moments of doubt,<br />
+            The silent fears,<br />
+            The question if you were enough,<br />
+            The question of your own existence,<br />
+            And still you carried on,<br />
+            Hold yourself together,<br />
+            Piece by piece.<br /><br />
+
+            I see the effect you have<br />
+            How your presence can calm,<br />
+            How your silence can comfort,<br />
+            How your laughter can shift a world,<br />
+            Even when you think no one notices.<br /><br />
+
+            I see your mystery<br />
+            The part of you untouchable,<br />
+            Uncontainable,<br />
+            Both question and answer,<br />
+            Chaos and calm, storm and stillness,<br />
+            Pulling the world into an orbit around you.<br /><br />
+
+            And do you know how I feel?<br />
+            I see you, every layer, every scar,<br />
+            Every small win, every silence fight,<br />
+            Every habit, every nuance, every sacrifice,<br />
+            Every pause, every glance, every unsaid word.<br /><br />
+
+            And in seeing you, I am humbled,<br />
+            I am awed,<br />
+            I am changed.<br />
+            For someone as extraordinary as you,<br />
+            Who has carried so much and still shines,<br />
+            Cannot help but leave a mark on the soul<br />
+            Of those who truly notice.<br /><br />
+
+            I do not expect words in return,<br />
+            I do not demand any recognition,<br />
+            I only hope you feel what I feel,<br />
+            That ever know.<br />
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+    FAVORITE SONGS SECTION
+    ========================= -->
+    <section id="favorite-songs" class="favorite-songs">
+      <div class="container">
+        <h2 class="section-title">Favorite Songs</h2>
+        <div class="songs-grid">
+          <!-- Song 1 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/sijn1e_ipcw?si=pvc07ThQ1q2nJRoT&amp;start=15"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Dil Tadap Tadap Ke keh Raha Hai</p>
+          </div>
+          <!-- Song 2 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/I2RefAyeVRA?si=aHaJo8if8v2V5Sat&amp;start=3"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Guzra Hua Zamana Aata Nahin Dobara</p>
+          </div>
+          <!-- Song 3 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/P53Pekl-kkc?si=RFIe3yivfKbwzKkR&amp;start=3"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Bachpan Ki Muhabbat Ko Dil Se Na Juda Karna</p>
+          </div>
+          <!-- Song 4 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/ZPql6bs_4Dc?si=HigByQ_U2LvyPp6A&amp;start=17"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Mujhko Apne Gale Laga Lo</p>
+          </div>
+          <!-- Song 5 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/904vZjjVhJU?si=uJx8u4Bowyzk9BHP&amp;start=2"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Neee Gagan Ke Tale</p>
+          </div>
+          <!-- Song 6 -->
+          <div class="song-card">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/Kne9A88FESs?si=DibIAhbMWAG63ogy"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+            <p class="song-name">Asha Bhosle Songs</p>
+          </div>
+          <!-- Add more songs as needed -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+      POEM / MODAL (hidden by default)
+      We'll fill it with sweet content; JS toggles .open class to show.
+      ========================= -->
+    <div
+      id="poem-modal"
+      class="modal"
+      role="dialog"
+      aria-hidden="true"
+      aria-labelledby="poem-title"
+    >
+      <div class="modal-content" role="document">
+        <button id="close-poem" class="modal-close" aria-label="Close poem">
+          ✕
+        </button>
+        <h2 id="poem-title">SELF-LOVE</h2>
+        <div class="poem-body">
+          <p>
+            Life is tough. People are tough. Situations are tough. But you know
+            what, you are tougher. You have been through a lot and still, you
+            keep going. This self-love writeup is here because sometimes, in the
+            middle of everything, you need to be reminded of your own strength
+            and worth. It's easy to forget how much you matter, how much you
+            give, and how much you deserve. This is for those moments when you
+            need to hear that you are enough, just as you are. You can read this
+            whenever you feel heavy and you need a little boost of love and
+            encouragement. Read it for yourself. Here it goes...
+            <br /><br />
+            "I LOVE YOU. Yes! This is the only thing that I want to say to you
+            right now. Or maybe you deserve to listen to this as many times as
+            possible. This soul of mine loves you like no one else has ever
+            loved you and never will. And I will always continue to love you
+            irrespective of anything that comes in between. Because you deserve
+            to be loved, to an extent that even the "love" itself gets jealous
+            of not being loved that much. <br /><br />
+            I know you have gone through a lot. Maybe you're still going through
+            it. But you know what, I am proud of you. No one knows how deep you
+            are hurt, struggling from inside and still you are kind and loving
+            the people around you. No one knows how deeply you need to be loved
+            and cared for. You are a true soldier Wasfi. The world needs more
+            people like you. You are actually inspiring to me. You deserve to be
+            loved to an extent that no one has loved anyone else in the entire
+            history and can never will. <br /><br />Just promise me one thing
+            Ayush.. that no matter what.. just spend every single atom of your
+            body to love others. Be kind to others as always. Tumhare andar itni
+            shakti hai ki ek insan to kya, apna sab kuch lutane ke baad bhi puri
+            duniya me agar ek katra bhi kisi ka dukh bacha reh gaya, tum use bhi
+            apne pyar se badalne ki takat rakhte ho. You are the very source of
+            happiness. You don't have to love because YOU ARE LOVE.
+            <br /><br />So just love yourself. If you somedays can't, then I
+            will. I always will."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================
+       Background audio (music) — do NOT autoplay unmuted (browsers block it).
+       We'll use JS to play after a user gesture and provide a toggle button.
+       Put your audio in assets/heart.mp3 (loopable, 30–120s is good).
+       ========================= -->
+    <audio id="bg-audio" src="assets/heart.mp3" loop preload="auto"></audio>
+
+    <!-- =========================
+       FOOTER (small)
+       ========================= -->
+    <footer class="site-footer" aria-hidden="false">
+      <div class="container">
+        <small>Made with ♥ </small>
+      </div>
+    </footer>
+
+    <!-- =========================
+       Main JS file (we'll build js/main.js next)
+       ========================= -->
+    <script src="js/main.js" defer></script>
+
+    <!-- Small inline script to make sure the page won't break if JS missing -->
+    <noscript>
+      <style>
+        .typed-lines::after {
+          content: " (enable JS for full experience)";
+          font-size: 0.9em;
+          opacity: 0.8;
+        }
+      </style>
+    </noscript>
+  </body>
+</html>
